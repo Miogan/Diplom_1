@@ -1,4 +1,4 @@
-package practicum;
+package ru.practicum;
 
 
 import org.junit.Before;

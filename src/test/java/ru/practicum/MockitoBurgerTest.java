@@ -1,4 +1,4 @@
-package practicum;
+package ru.practicum;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +12,7 @@ import praktikum.Ingredient;
 import praktikum.IngredientType;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -112,28 +113,22 @@ public class MockitoBurgerTest {
     }
 
     @Test
-    // Проверяем удаление ингредиента по индексу
     public void testRemoveIngredientAbsent() {
         // Добавляем два ингредиента в бургер
         burger.addIngredient(mockIngredient1);
         burger.addIngredient(mockIngredient2);
 
-        // Настраиваем данные для первого ингредиента (который будем удалять)
-        when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
-        when(mockIngredient1.getName()).thenReturn("кетчуп");
-        // Настраиваем данные для второго ингредиента (который останется)
-        when(mockIngredient2.getType()).thenReturn(IngredientType.FILLING);
-        when(mockIngredient2.getName()).thenReturn("сыр");
+        // Настраиваем данные с lenient()
+        lenient().when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
+        lenient().when(mockIngredient1.getName()).thenReturn("кетчуп");
+        lenient().when(mockIngredient2.getType()).thenReturn(IngredientType.FILLING);
+        lenient().when(mockIngredient2.getName()).thenReturn("сыр");
 
-        // Act - удаляем первый ингредиент (с индексом 0)
         burger.removeIngredient(0);
-
-        // Получаем чек после удаления
         String receipt = burger.getReceipt();
-
-        // Проверяем, что кетчуп удалился
         assertFalse("В чеке не должно быть кетчупа после удаления", receipt.contains("кетчуп"));
     }
+
 
     @Test
     // Проверяем наличие второго ингредиента, после удаления первого
@@ -142,20 +137,13 @@ public class MockitoBurgerTest {
         burger.addIngredient(mockIngredient1);
         burger.addIngredient(mockIngredient2);
 
-        // Настраиваем данные для первого ингредиента (который будем удалять)
-        when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
-        when(mockIngredient1.getName()).thenReturn("кетчуп");
-        // Настраиваем данные для второго ингредиента (который останется)
-        when(mockIngredient2.getType()).thenReturn(IngredientType.FILLING);
-        when(mockIngredient2.getName()).thenReturn("сыр");
+        lenient().when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
+        lenient().when(mockIngredient1.getName()).thenReturn("кетчуп");
+        lenient().when(mockIngredient2.getType()).thenReturn(IngredientType.FILLING);
+        lenient().when(mockIngredient2.getName()).thenReturn("сыр");
 
-        // Act - удаляем первый ингредиент (с индексом 0)
         burger.removeIngredient(0);
-
-        // Получаем чек после удаления
         String receipt = burger.getReceipt();
-
-        // Проверяем, что сыр остался
         assertTrue("В чеке должен остаться сыр после удаления", receipt.contains("сыр"));
     }
 
