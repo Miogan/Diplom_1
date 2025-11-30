@@ -53,8 +53,6 @@ public class ParameterizedBurgerTest {
 
     @Test
     public void testGetPriceWithDifferentParameters() {
-        // Arrange (Подготовка) - создаем стабы на основе параметров теста
-
         // Создаем стаб булочки с заданной ценой
         Bun bunStub = createBunStub("булочка", bunPrice);
 
@@ -73,10 +71,10 @@ public class ParameterizedBurgerTest {
             burger.addIngredient(ingredientStub);
         }
 
-        // Act (Действие) - вызываем тестируемый метод
+        // Вызываем тестируемый метод
         float actualPrice = burger.getPrice();
 
-        // Assert (Проверка) - сравниваем фактический результат с ожидаемым
+        // Сравниваем фактический результат с ожидаемым
         assertEquals(
                 String.format("Ошибка при bunPrice=%.1f, ingredients=%dx%.1f",
                         bunPrice, numberOfIngredients, ingredientPrice),
