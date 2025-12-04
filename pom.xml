@@ -115,6 +115,7 @@
                 </dependencies>
             </plugin>
 
+
             <!-- Allure Maven plugin для генерации отчетов -->
             <plugin>
                 <groupId>io.qameta.allure</groupId>
