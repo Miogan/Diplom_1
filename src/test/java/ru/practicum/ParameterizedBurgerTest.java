@@ -88,8 +88,6 @@ public class ParameterizedBurgerTest {
 
     private Bun createBunStub(String name, float price) {
         return new Bun(name, price) {
-            // Используем стандартную реализацию, так как класс Bun уже возвращает правильные значения
-            // Стаб нужен для гарантии предсказуемого поведения в тестах
         };
     }
 

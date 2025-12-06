@@ -186,11 +186,38 @@ public class MockitoBurgerTest {
         // Находим позиции каждого ингредиента в строке чека
         int saladIndex = receipt.indexOf("салат");
         int tomatoIndex = receipt.indexOf("помидорка");
-        int mayoIndex = receipt.indexOf("майонез");
 
         // Проверяем, что салат теперь первый, потом помидор, потом майонез
         assertTrue("Салат должен быть перед помидором", saladIndex < tomatoIndex);
-        assertTrue("Помидор должен быть перед майонезом", tomatoIndex < mayoIndex);
+    }
+
+    public void testMoveIngredientAdditional() {
+        // Добавляем три ингредиента в бургер
+        burger.addIngredient(mockIngredientBun);
+        burger.addIngredient(mockIngredientFilling);
+        burger.addIngredient(mockIngredientAdditional);
+
+        // Настраиваем данные для всех ингредиентов
+        when(mockIngredientBun.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientBun.getName()).thenReturn("майонез");
+        when(mockIngredientFilling.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientFilling.getName()).thenReturn("салат");
+        when(mockIngredientAdditional.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientAdditional.getName()).thenReturn("помидорка");
+
+        // Перемещаем майонез (индекс 0) на позицию после помидора (индекс 2)
+        burger.moveIngredient(0, 2);
+
+        // Получаем чек после перемещения
+        String receipt = burger.getReceipt();
+
+        // Проверяем новый порядок ингредиентов в чеке
+        // Находим позиции каждого ингредиента в строке чека
+
+        int tomatoIndex = receipt.indexOf("помидорка");
+        int mayoIndex = receipt.indexOf("майонез");
+
+         assertTrue("Помидор должен быть перед майонезом", tomatoIndex < mayoIndex);
     }
 
     // Проверяем перемещение ингредиента с неверным индексом, ожидаем исключение
@@ -280,15 +307,17 @@ public class MockitoBurgerTest {
         // Получаем чек бургера
         String receipt = burger.getReceipt();
 
-        // Проверяем все элементы чека
-        assertTrue("Чек должен содержать название булочки", receipt.contains("белая булочка"));
-        assertTrue("Чек должен содержать кетчуп", receipt.contains("кетчуп"));
-        assertTrue("Чек должен содержать котлету", receipt.contains("котлета"));
-        assertTrue("Чек должен содержать майонез", receipt.contains("майонез"));
-        assertTrue("Чек должен содержать общую цену", receipt.contains("Price:"));
-        // Проверяем, что булочка упоминается дважды (в начале и в конце)
-        assertTrue("Булочка должна упоминаться в чеке дважды",
-                receipt.indexOf("белая булочка") != receipt.lastIndexOf("белая булочка"));
+        String expectedReceipt =
+                "(==== белая булочка ====)\r\n" +
+                        "= sauce кетчуп =\r\n" +
+                        "= filling котлета =\r\n" +
+                        "= sauce майонез =\r\n" +
+                        "(==== белая булочка ====)\r\n" +
+                        "\r\n" +
+                        "Price: 175,000000\r\n";
+
+        assertEquals("Чек должен соответствовать ожидаемому формату",
+                expectedReceipt, receipt);
     }
 
     @Test
@@ -314,10 +343,37 @@ public class MockitoBurgerTest {
         // Проверяем порядок ингредиентов в чеке
         int mustardIndex = receipt.indexOf("горчица");
         int saladIndex = receipt.indexOf("салат");
-        int tomatoIndex = receipt.indexOf("помидор");
+
 
         // Проверяем, что ингредиенты идут в том же порядке, в котором были добавлены
         assertTrue("Горчица должна быть перед салатом", mustardIndex < saladIndex);
+    }
+
+    @Test
+    // Проверяем, что ингредиенты сохраняют порядок добавления в чеке
+    public void testIngredientsAdditionalOrderInReceipt() {
+        // Настраиваем данные булочки
+        when(mockBun.getName()).thenReturn("ржаная булочка");
+        // Настраиваем данные для трех ингредиентов
+        when(mockIngredientBun.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientBun.getName()).thenReturn("горчица");
+        when(mockIngredientFilling.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientFilling.getName()).thenReturn("салат");
+        when(mockIngredientAdditional.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientAdditional.getName()).thenReturn("помидор");
+        // Добавляем ингредиенты в определенном порядке
+        burger.addIngredient(mockIngredientBun);
+        burger.addIngredient(mockIngredientFilling);
+        burger.addIngredient(mockIngredientAdditional);
+
+        // Получаем чек бургера
+        String receipt = burger.getReceipt();
+
+        // Проверяем порядок ингредиентов в чеке
+        int saladIndex = receipt.indexOf("салат");
+        int tomatoIndex = receipt.indexOf("помидор");
+
+        // Проверяем, что ингредиенты идут в том же порядке, в котором были добавлены
         assertTrue("Салат должен быть перед помидором", saladIndex < tomatoIndex);
     }
 
@@ -331,13 +387,15 @@ public class MockitoBurgerTest {
         // Получаем чек пустого бургера (без ингредиентов)
         String receipt = burger.getReceipt();
 
-        // Проверяем основные элементы чека
-        assertTrue("Чек должен содержать название булочки", receipt.contains("обычная булочка"));
-        assertTrue("Чек должен содержать цену", receipt.contains("Price:"));
+        String expectedReceipt =
+                "(==== обычная булочка ====)\r\n" +
+                        "(==== обычная булочка ====)\r\n" +
+                        "\r\n" +
+                        "Price: 80,000000\r\n";
 
-        // Проверяем чек
-        assertTrue("Чек должен содержать правильную цену",
-                receipt.contains("80") || receipt.contains("80.0") || receipt.contains("80.00"));
+        // Проверяем, что чек полностью соответствует ожидаемому формату
+        assertEquals("Чек пустого бургера должен соответствовать ожидаемому формату",
+                expectedReceipt, receipt);
     }
 }
 
