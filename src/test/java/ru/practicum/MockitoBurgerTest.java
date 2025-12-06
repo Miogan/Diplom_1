@@ -24,13 +24,13 @@ public class MockitoBurgerTest {
     private Bun mockAnotherBun;
 
     @Mock
-    private Ingredient mockIngredient1;
+    private Ingredient mockIngredientBun;
 
     @Mock
-    private Ingredient mockIngredient2;
+    private Ingredient mockIngredientFilling;
 
     @Mock
-    private Ingredient mockIngredient3;
+    private Ingredient mockIngredientAdditional;
 
     private Burger burger;
     private Burger burgerAnother;
@@ -71,10 +71,10 @@ public class MockitoBurgerTest {
     // Проверяем добавление ингредиента
     public void testAddIngredient() {
         // Добавляем ингредиент в бургер
-        burger.addIngredient(mockIngredient1);
+        burger.addIngredient(mockIngredientBun);
 
-        when(mockIngredient1.getName()).thenReturn("помидорка");
-        when(mockIngredient1.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientBun.getName()).thenReturn("помидорка");
+        when(mockIngredientBun.getType()).thenReturn(IngredientType.FILLING);
         String receipt = burger.getReceipt();
 
         // Проверяем, что в чеке есть название установленной начинки
@@ -86,10 +86,10 @@ public class MockitoBurgerTest {
     // Проверяем добавление типа начинка ингредиента
     public void testAddIngredientTypeFilling() {
         // Добавляем ингредиент в бургер
-        burger.addIngredient(mockIngredient1);
+        burger.addIngredient(mockIngredientBun);
 
-        when(mockIngredient1.getName()).thenReturn("помидорка");
-        when(mockIngredient1.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientBun.getName()).thenReturn("помидорка");
+        when(mockIngredientBun.getType()).thenReturn(IngredientType.FILLING);
         String receipt = burger.getReceipt();
 
         // Проверяем, что в чеке есть тип начинка
@@ -101,10 +101,10 @@ public class MockitoBurgerTest {
     // Проверяем добавление типа соус ингредиента
     public void testAddIngredientTypeSause() {
         // Добавляем ингредиент в бургер
-        burger.addIngredient(mockIngredient1);
+        burger.addIngredient(mockIngredientBun);
 
-        when(mockIngredient1.getName()).thenReturn("сладкий");
-        when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientBun.getName()).thenReturn("сладкий");
+        when(mockIngredientBun.getType()).thenReturn(IngredientType.SAUCE);
         String receipt = burger.getReceipt();
 
         // Проверяем, что в чеке есть тип соус
@@ -115,14 +115,14 @@ public class MockitoBurgerTest {
     @Test
     public void testRemoveIngredientAbsent() {
         // Добавляем два ингредиента в бургер
-        burger.addIngredient(mockIngredient1);
-        burger.addIngredient(mockIngredient2);
+        burger.addIngredient(mockIngredientBun);
+        burger.addIngredient(mockIngredientFilling);
 
         // Настраиваем данные с lenient()
-        lenient().when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
-        lenient().when(mockIngredient1.getName()).thenReturn("кетчуп");
-        lenient().when(mockIngredient2.getType()).thenReturn(IngredientType.FILLING);
-        lenient().when(mockIngredient2.getName()).thenReturn("сыр");
+        lenient().when(mockIngredientBun.getType()).thenReturn(IngredientType.SAUCE);
+        lenient().when(mockIngredientBun.getName()).thenReturn("кетчуп");
+        lenient().when(mockIngredientFilling.getType()).thenReturn(IngredientType.FILLING);
+        lenient().when(mockIngredientFilling.getName()).thenReturn("сыр");
 
         burger.removeIngredient(0);
         String receipt = burger.getReceipt();
@@ -134,13 +134,13 @@ public class MockitoBurgerTest {
     // Проверяем наличие второго ингредиента, после удаления первого
     public void testRemoveIngredientAvailabilityOfRemaining() {
         // Добавляем два ингредиента в бургер
-        burger.addIngredient(mockIngredient1);
-        burger.addIngredient(mockIngredient2);
+        burger.addIngredient(mockIngredientBun);
+        burger.addIngredient(mockIngredientFilling);
 
-        lenient().when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
-        lenient().when(mockIngredient1.getName()).thenReturn("кетчуп");
-        lenient().when(mockIngredient2.getType()).thenReturn(IngredientType.FILLING);
-        lenient().when(mockIngredient2.getName()).thenReturn("сыр");
+        lenient().when(mockIngredientBun.getType()).thenReturn(IngredientType.SAUCE);
+        lenient().when(mockIngredientBun.getName()).thenReturn("кетчуп");
+        lenient().when(mockIngredientFilling.getType()).thenReturn(IngredientType.FILLING);
+        lenient().when(mockIngredientFilling.getName()).thenReturn("сыр");
 
         burger.removeIngredient(0);
         String receipt = burger.getReceipt();
@@ -152,7 +152,7 @@ public class MockitoBurgerTest {
     // Проверяем наличие исключения, при удалении ингредиента с неверным индексом
     public void testRemoveIngredientInvalidIndex() {
         // Arrange - добавляем только один ингредиент
-        burger.addIngredient(mockIngredient1);
+        burger.addIngredient(mockIngredientBun);
 
         // Пытаемся удалить ингредиент с несуществующим индексом
         // Ожидаем, что выбросится IndexOutOfBoundsException
@@ -164,17 +164,17 @@ public class MockitoBurgerTest {
     // Проверяем перемещение ингредиента на новую позицию
     public void testMoveIngredient() {
         // Добавляем три ингредиента в бургер
-        burger.addIngredient(mockIngredient1);
-        burger.addIngredient(mockIngredient2);
-        burger.addIngredient(mockIngredient3);
+        burger.addIngredient(mockIngredientBun);
+        burger.addIngredient(mockIngredientFilling);
+        burger.addIngredient(mockIngredientAdditional);
 
         // Настраиваем данные для всех ингредиентов
-        when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
-        when(mockIngredient1.getName()).thenReturn("майонез");
-        when(mockIngredient2.getType()).thenReturn(IngredientType.FILLING);
-        when(mockIngredient2.getName()).thenReturn("салат");
-        when(mockIngredient3.getType()).thenReturn(IngredientType.FILLING);
-        when(mockIngredient3.getName()).thenReturn("помидорка");
+        when(mockIngredientBun.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientBun.getName()).thenReturn("майонез");
+        when(mockIngredientFilling.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientFilling.getName()).thenReturn("салат");
+        when(mockIngredientAdditional.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientAdditional.getName()).thenReturn("помидорка");
 
         // Перемещаем майонез (индекс 0) на позицию после помидора (индекс 2)
         burger.moveIngredient(0, 2);
@@ -197,7 +197,7 @@ public class MockitoBurgerTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testMoveIngredientInvalidIndex() {
         // Arrange - добавляем один ингредиент
-        burger.addIngredient(mockIngredient1);
+        burger.addIngredient(mockIngredientBun);
 
         // Пытаемся переместить ингредиент на несуществующую позицию
         // Ожидаем, что выбросится IndexOutOfBoundsException
@@ -222,9 +222,9 @@ public class MockitoBurgerTest {
     public void testGetPriceWithOneIngredient() {
         // Настраиваем цены булочки и ингредиента
         when(mockBun.getPrice()).thenReturn(50.0f);
-        when(mockIngredient1.getPrice()).thenReturn(30.0f);
+        when(mockIngredientBun.getPrice()).thenReturn(30.0f);
         // Добавляем ингредиент в бургер
-        burger.addIngredient(mockIngredient1);
+        burger.addIngredient(mockIngredientBun);
 
         // Получаем цену бургера
         float price = burger.getPrice();
@@ -238,14 +238,14 @@ public class MockitoBurgerTest {
     public void testGetPriceWithMultipleIngredients() {
         // Настраиваем цены всех компонентов
         when(mockBun.getPrice()).thenReturn(100.0f);
-        when(mockIngredient1.getPrice()).thenReturn(50.0f);
-        when(mockIngredient2.getPrice()).thenReturn(75.0f);
-        when(mockIngredient3.getPrice()).thenReturn(25.0f);
+        when(mockIngredientBun.getPrice()).thenReturn(50.0f);
+        when(mockIngredientFilling.getPrice()).thenReturn(75.0f);
+        when(mockIngredientAdditional.getPrice()).thenReturn(25.0f);
 
         // Добавляем все три ингредиента в бургер
-        burger.addIngredient(mockIngredient1);
-        burger.addIngredient(mockIngredient2);
-        burger.addIngredient(mockIngredient3);
+        burger.addIngredient(mockIngredientBun);
+        burger.addIngredient(mockIngredientFilling);
+        burger.addIngredient(mockIngredientAdditional);
 
         // Получаем общую цену бургера
         float price = burger.getPrice();
@@ -262,20 +262,20 @@ public class MockitoBurgerTest {
         when(mockBun.getPrice()).thenReturn(50.0f);
 
         // Настраиваем данные для трех ингредиентов разных типов
-        when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
-        when(mockIngredient1.getName()).thenReturn("кетчуп");
-        when(mockIngredient1.getPrice()).thenReturn(10.0f);
-        when(mockIngredient2.getType()).thenReturn(IngredientType.FILLING);
-        when(mockIngredient2.getName()).thenReturn("котлета");
-        when(mockIngredient2.getPrice()).thenReturn(50.0f);
-        when(mockIngredient3.getType()).thenReturn(IngredientType.SAUCE);
-        when(mockIngredient3.getName()).thenReturn("майонез");
-        when(mockIngredient3.getPrice()).thenReturn(15.0f);
+        when(mockIngredientBun.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientBun.getName()).thenReturn("кетчуп");
+        when(mockIngredientBun.getPrice()).thenReturn(10.0f);
+        when(mockIngredientFilling.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientFilling.getName()).thenReturn("котлета");
+        when(mockIngredientFilling.getPrice()).thenReturn(50.0f);
+        when(mockIngredientAdditional.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientAdditional.getName()).thenReturn("майонез");
+        when(mockIngredientAdditional.getPrice()).thenReturn(15.0f);
 
         // Добавляем все ингредиенты в бургер
-        burger.addIngredient(mockIngredient1);
-        burger.addIngredient(mockIngredient2);
-        burger.addIngredient(mockIngredient3);
+        burger.addIngredient(mockIngredientBun);
+        burger.addIngredient(mockIngredientFilling);
+        burger.addIngredient(mockIngredientAdditional);
 
         // Получаем чек бургера
         String receipt = burger.getReceipt();
@@ -297,16 +297,16 @@ public class MockitoBurgerTest {
         // Настраиваем данные булочки
         when(mockBun.getName()).thenReturn("ржаная булочка");
         // Настраиваем данные для трех ингредиентов
-        when(mockIngredient1.getType()).thenReturn(IngredientType.SAUCE);
-        when(mockIngredient1.getName()).thenReturn("горчица");
-        when(mockIngredient2.getType()).thenReturn(IngredientType.FILLING);
-        when(mockIngredient2.getName()).thenReturn("салат");
-        when(mockIngredient3.getType()).thenReturn(IngredientType.FILLING);
-        when(mockIngredient3.getName()).thenReturn("помидор");
+        when(mockIngredientBun.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientBun.getName()).thenReturn("горчица");
+        when(mockIngredientFilling.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientFilling.getName()).thenReturn("салат");
+        when(mockIngredientAdditional.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientAdditional.getName()).thenReturn("помидор");
         // Добавляем ингредиенты в определенном порядке
-        burger.addIngredient(mockIngredient1);
-        burger.addIngredient(mockIngredient2);
-        burger.addIngredient(mockIngredient3);
+        burger.addIngredient(mockIngredientBun);
+        burger.addIngredient(mockIngredientFilling);
+        burger.addIngredient(mockIngredientAdditional);
 
         // Получаем чек бургера
         String receipt = burger.getReceipt();
